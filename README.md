@@ -8,60 +8,44 @@ Resolva esta função sem usar lambda, só usando outras funções existentes ou
 RESOLUÇÃO:
 
 ```
+filterBoxes :: Float -> [( (Float, Float, Float, Float), Float)] -> [(Float, Float, Float, Float)] 
+filterBoxes limiar pairs = [boundingBox | (boundingBox, score) <- pairs, score >= limiar]
+
+
 selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float] -> Float -> [(Float, Float, Float, Float)]
+selectBoundingBoxesWithHighScore boundingBoxes scores limiar = 
+    filterBoxes limiar (zip boundingBoxes scores)
 
-selectBoundingBoxesWithHighScore boundingBoxes scores limiar  = 
-
-    filterBoxes filteredPairs
-    where 
-    filteredPairs = zip boundingBoxes scores
-    
-    filterBoxes :: [( (Float, Float, Float, Float), Float)] -> [   (Float, Float, Float, Float)]
-    filterBoxes pairs = [boundingBox | (boundingBox, score) <- pairs, score >= limiar]
 
  ```
 
 #**Passo a Passo**
 
-1° Primeiro Declaramos a função chamando de **selectBoundingBoxesWithHighScore**;  
-```selectBoundingBoxesWithHighScore```
+1° Definimos a função **filterBoxes** que recebe como parâmetro a váriavel **Limiar**, o zip **filteredPairs** e nos retorna uma tupla de boundingBoxes  
+ ```filterBoxes :: [( (Float, Float, Float, Float), Float)] -> [   (Float, Float, Float, Float)]```  
 
-2° Passamos como primeiro argumento da função uma tupla [(float,float,float,float)] **boundingBoxes**, o que significa que teremos uma tupla de elementos com 4 valores cada;  
-```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)]```
-
-- Ex: [(300,100,0,1),(100,500,1,30)] #Dois elementos com 4 valores em cada;
-
-3° Passamos como segundo argumento da função uma tupla [float] **scores**, para definir as pontuações de cada Bounding Box;  
-```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float]```
-
-4° Passamos um valor float **Limiar** ao qual iremos usar para extrair somente as BoundignBox->Score > limiar  
-```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float] -> Float```
-
-5° Chamamos a função filterBoxes e passamos o parâmetro filteredPairs para ela  
-```filterBoxes filteredPairs```
-
-6° Usamos a cláusula **where** para permitir definir variáveis e funções locais que podem ser usadas no corpo da função principal  
-```where```
-
-7° Definimos **filteredPairs** como sendo um zip entre **boundingBoxes** e **scores**  
- - A função zip é usada para combinar duas listas em uma lista de pares de acordo com a sua posição;  
- ``` filteredPairs = zip boundingBoxes scores```  
-- Ex:  
-    - boundingBoxes = [(300,100,0,1),(100,500,1,30)]  
-    - scores = [0.7,0.9]  
-    - Teremos,  
-    - filteredPairs = [((300, 100, 0, 1), 0.7), ((100, 500, 1, 30), 0.9)]
-
- 8° Definimos a função **filterBoxes** que recebe como parâmetro o zip **filteredPairs** e nos retorna uma tupla de boundingBoxes  
- ```filterBoxes :: [( (Float, Float, Float, Float), Float)] -> [   (Float, Float, Float, Float)]```
-
-
-9° Passamos que a função **filterBoxes** irá receber um argumento **pairs** (filteredPairs)  
+ 2° Passamos que a função **filterBoxes** irá receber um argumento **Limiar** e um **pairs**  
 ```[boundingBox | (boundingBox, score <- pairs ```  
 Definimos a condição de filtragem dos elementos:  
 ```score >= limiar```  
 Essa condição irá incluir um **boundingBox** na nova lista caso **score** >= **limiar**
 
+3° Declaramos a função chamando de **selectBoundingBoxesWithHighScore**;  
+```selectBoundingBoxesWithHighScore```
+
+4° Passamos como primeiro argumento da função uma tupla [(float,float,float,float)] **boundingBoxes**, o que significa que teremos uma tupla de elementos com 4 valores cada;  
+```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)]```
+
+- Ex: [(300,100,0,1),(100,500,1,30)] #Dois elementos com 4 valores em cada;
+
+5° Passamos como segundo argumento da função uma tupla [float] **scores**, para definir as pontuações de cada Bounding Box;  
+```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float]```
+
+6° Passamos um valor float **Limiar** ao qual iremos usar para extrair somente as BoundignBox->Score > limiar  
+```selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float] -> Float```
+
+7° Chamamos a função FilterBoxes e passamos para ela o valor **Limiar** juntamento com uma tupla que contém cada boundingBox atribuida com o seu Score  
+```filterBoxes limiar (zip boundingBoxes scores)```
 
 #**Conclusão**
 
@@ -79,7 +63,7 @@ De fato, o código nos retorna somente os valores de BoundignBox onde score >= l
 
 #**Versão Errônea**  
 
-    selectBoundingBoxesWithHighScore :: [(float,float,float,float)] -> [float] -> float -> [(float, float, float, float)]
+    selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float] -> Float -> [(Float, Float, Float, Float)]
 
     selectBoundingBoxesWithHighScore boundingBoxes scores limiar  = 
 
@@ -87,8 +71,17 @@ De fato, o código nos retorna somente os valores de BoundignBox onde score >= l
     where 
     filteredPairs = zip boundingBoxes scores
     
-    filterBoxes :: [( (float, float, float, float), float)] -> [   (float, float, float, float)]
-    filterBoxes pairs = [boundingBox | (boundingBox, score) <- pairs, score >= limiar]
+    filterBoxes :: [( (Float, Float, Float, Float), Float)] -> [   (Float, Float, Float, Float)]
+    filterBoxes pairs = [boundingBox | (boundingBox, score) <- pairs, score >= limiar]```  
+
+- Essa versão apresenta uma maneira equivocada de definir o tipo primitivo **Float** != **float**
+    - Em haskell, **Float** é reconhecido como um tipo primitivo de números em ponto flutuante, enquanto **float** (minusculo) não é reconhecido como tipo primitivo;
+    - Você pode definir novos tipos primitivos em Haskell 
+        - Ex:   
+        ``` data Placar = Placar int int```  
+        ```p1 :: Placar```  
+        ```p1 = Placar 1 2```
+
 
 #**Fontes**  
 [Pdf](https://www.facom.ufu.br/~madriana/PF/TP3-Listas.pdf) (para entender a função zip);  
