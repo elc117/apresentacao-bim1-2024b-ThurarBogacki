@@ -79,7 +79,7 @@ De fato, o código nos retorna somente os valores de BoundignBox onde score >= l
 
 #**Versão Errônea**  
 
-    selectBoundingBoxesWithHighScore :: [(Float,Float,Float,Float)] -> [Float] -> Float -> [(Float, Float, Float, Float)]
+    selectBoundingBoxesWithHighScore :: [(float,float,float,float)] -> [float] -> float -> [(float, float, float, float)]
 
     selectBoundingBoxesWithHighScore boundingBoxes scores limiar  = 
 
@@ -87,7 +87,7 @@ De fato, o código nos retorna somente os valores de BoundignBox onde score >= l
     where 
     filteredPairs = zip boundingBoxes scores
     
-    filterBoxes :: [( (Float, Float, Float, Float), Float)] -> [   (Float, Float, Float, Float)]
+    filterBoxes :: [( (float, float, float, float), float)] -> [   (float, float, float, float)]
     filterBoxes pairs = [boundingBox | (boundingBox, score) <- pairs, score >= limiar]
 
 #**Fontes**  
